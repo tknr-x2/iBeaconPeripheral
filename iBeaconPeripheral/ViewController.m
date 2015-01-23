@@ -352,14 +352,27 @@
 }
 // メッセージ入力終了処理
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    
     if (textField == majorTextField) {
-        self.major = ([textField.text isEqualToString:@""] || [textField.text isEqualToString:@"-"])?-1:[textField.text intValue];
-        textField.text = [NSString stringWithFormat:@"%@", (self.major>=0 && self.major<=9999)?[NSString stringWithFormat:@"%d", self.major]:@"-"];
+        int tmp_val = [textField.text intValue];
+        if (tmp_val < 0) {
+            self.major = 0;
+        } else if (tmp_val > UINT16_MAX) {
+            self.major = UINT16_MAX;
+        } else {
+            self.major = tmp_val;
+        }
+        textField.text = [NSString stringWithFormat:@"%@", [NSString stringWithFormat:@"%d", self.major]];
         NSLog(@"changed major: self.major = %d", self.major);
     } else if (textField == minorTextField) {
-        self.minor = ([textField.text isEqualToString:@""] || [textField.text isEqualToString:@"-"])?-1:[textField.text intValue];
-        textField.text = [NSString stringWithFormat:@"%@", (self.minor>=0 && self.minor<=9999)?[NSString stringWithFormat:@"%d", self.minor]:@"-"];
+        int tmp_val = [textField.text intValue];
+        if (tmp_val < 0) {
+            self.minor = 0;
+        } else if (tmp_val > UINT16_MAX) {
+            self.minor = UINT16_MAX;
+        } else {
+            self.minor = tmp_val;
+        }
+        textField.text = [NSString stringWithFormat:@"%@", [NSString stringWithFormat:@"%d", self.minor]];
         NSLog(@"changed minor: self.minor = %d", self.minor);
     } else if (textField == measuredPowerTextField) {
         self.measuredPower = [NSNumber numberWithFloat:[textField.text floatValue]];
